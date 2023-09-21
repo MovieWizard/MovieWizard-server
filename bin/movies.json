@@ -1,5 +1,5 @@
-{
-  "movies": [
+
+ [
     {
       "Title": "The Shawshank Redemption",
       "Year": "1994",
@@ -9877,4 +9877,3 @@
       "Response": "True"
     }
   ]
-}
