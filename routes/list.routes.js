@@ -14,3 +14,19 @@ router.get('/mood-lists', (req, res, next) => {
 }) 
 
 module.exports = router;
+
+//Create new mood list
+router.post('/mood-lists' , (req, res, next) => {
+    const {title, description, mood} = req.body
+    List.create({title, description, mood})
+    .then(newList => res.json(newList))
+  
+    .catch(e => {
+        res.status(500).json({
+            message: "Error create new mood list ",
+            error: e
+        })
+    })
+}) 
+
+module.exports = router;
