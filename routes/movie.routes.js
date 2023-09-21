@@ -29,7 +29,8 @@ router.get("/movies/:movieId", (req, res, next) => {
 
 //CREATE MOVIE:
 router.post("/movies", (req, res, next) => {
-  const { title, plot, poster, actors, year, genre } = req.body;
+  const { title, year, poster, actors, genre, plot, imdbRating, language } =
+    req.body;
 
   const newMovie = {
     title,
@@ -38,6 +39,8 @@ router.post("/movies", (req, res, next) => {
     actors,
     year,
     genre,
+    imdbRating,
+    language,
   };
 
   Movie.create(newMovie)
@@ -61,12 +64,14 @@ router.put("/movies/:movieId", (req, res, next) => {
   }
 
   const newDetails = {
-    ttle: req.body.title,
+    title: req.body.title,
     plot: req.body.plot,
     poster: req.body.poster,
     actors: req.body.actors,
     year: req.body.year,
     genre: req.body.genre,
+    imdbRating: req.body.imdbRating,
+    language: req.body.language,
   };
 
   Movie.findByIdAndUpdate(movieId, newDetails, { new: true })
