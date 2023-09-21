@@ -1,11 +1,7 @@
 const router = require("express").Router();
-const mongoose = require("mongoose");
-const Movie = require("../models/Movie.model");
-const { isAuthenticated } = require("../middleware/jwt.middleware")
-
+const Movie = require("../models/Movie");
 
 // Get all movies
-
 router.get('/movies', (req, res, next) => {
     Movie.find()
     .then(movie => res.json(movie))
@@ -15,3 +11,5 @@ router.get('/movies', (req, res, next) => {
     })
 
 })
+
+module.exports = router;
