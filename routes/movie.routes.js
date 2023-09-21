@@ -2,6 +2,25 @@ const router = require("express").Router();
 const Movie = require("../models/Movie");
 const mongoose = require("mongoose");
 
+
+//Get Search results 
+router.get('/search', (req, res, next) => {
+  const {q} = req.query
+  Movie.find(
+    { "title": { "$regex": q, "$options": "i" } },
+  )
+  .then(search => res.json(search))
+  .catch((e) => {
+    res.status(500).json({
+      message: "Error get search result",
+      error: e,
+    });
+  });
+
+})
+
+
+
 // Get all movies
 router.get("/movies", (req, res, next) => {
   Movie.find()
