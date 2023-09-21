@@ -24,6 +24,9 @@ app.use("/auth", authRoutes);
 const movieRoutes = require("./routes/movie.routes");
 app.use("/api", movieRoutes)
 
+const listRoutes = require("./routes/list.routes")
+app.use("/api", listRoutes)
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 

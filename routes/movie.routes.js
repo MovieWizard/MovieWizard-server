@@ -7,7 +7,7 @@ router.get('/movies', (req, res, next) => {
     .then(movies => res.json(movies))
     .catch(e => {
         res.status(500).json({
-            message: "Error get the movie details",
+            message: "Error get the movies list",
             error: e
         })
     })
@@ -21,7 +21,7 @@ router.get('/movies/:movieId', (req, res, next) => {
     .then(movie => res.json(movie))
     .catch(e => {
         res.status(500).json({
-            message: "Error getting project details",
+            message: "Error get the movie details",
             error: e
         }) 
     }

@@ -8,6 +8,8 @@ const MovieSchema = new Schema({
     actors: String,
     genre: String,
     plot: String,
+    imdbRating: String,
+    language: String,
 })
 
 module.exports = model('Movie', MovieSchema);
