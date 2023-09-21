@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const List = require("../models/MovieList")
+const Movie = require("../models/Movie")
 
 //Get all mood list
 router.get('/mood-lists', (req, res, next) => {
@@ -41,4 +42,21 @@ router.get('/mood-lists/:moodListId', (req, res, next) => {
         })
     })
 })
+
+//Update movie list
+router.put('/mood-lists/:moodListId', (req, res, next) => {
+    const { moodListId } = req.params
+    const {movieId} = req.body
+
+     List.findByIdAndUpdate(moodListId, { $push: { movies: movieId } }, {new: true})
+     .then(updateList => res.json(updateList))
+     .catch(e => {
+        res.status(500).json({
+            message: "Error update a mood list ",
+            error: e
+        })
+    })
+})
+
+
 module.exports = router;
