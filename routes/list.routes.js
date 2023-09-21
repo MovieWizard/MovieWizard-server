@@ -29,4 +29,16 @@ router.post('/mood-lists' , (req, res, next) => {
     })
 }) 
 
+// Get mood list
+router.get('/mood-lists/:moodListId', (req, res, next) => {
+    const { moodListId } = req.params
+    List.findById(moodListId)
+    .then(list => res.json(list))
+    .catch(e => {
+        res.status(500).json({
+            message: "Error get a mood list ",
+            error: e
+        })
+    })
+})
 module.exports = router;
