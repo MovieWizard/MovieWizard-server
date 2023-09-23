@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const List = require("../models/MovieList")
 const Movie = require("../models/Movie")
+const {isAuthenticated} = require("../middleware/jwt.middleware")
 
 //Get all mood list
-router.get('/mood-lists', (req, res, next) => {
+router.get('/mood-lists', isAuthenticated, (req, res, next) => {
     List.find()
     .then(lists => res.json(lists))
     .catch(e => {
@@ -17,7 +18,7 @@ router.get('/mood-lists', (req, res, next) => {
 module.exports = router;
 
 //Create new mood list
-router.post('/mood-lists' , (req, res, next) => {
+router.post('/mood-lists' , isAuthenticated, (req, res, next) => {
     const {title, description, mood} = req.body
     List.create({title, description, mood})
     .then(newList => res.json(newList))
