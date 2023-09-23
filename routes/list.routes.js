@@ -20,7 +20,8 @@ module.exports = router;
 //Create new mood list
 router.post('/mood-lists' , isAuthenticated, (req, res, next) => {
     const {title, description, mood} = req.body
-    List.create({title, description, mood})
+    const user = req.payload._id
+    List.create({title, description, mood, user})
     .then(newList => res.json(newList))
   
     .catch(e => {
