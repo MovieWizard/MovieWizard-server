@@ -128,4 +128,24 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
   res.status(200).json(req.payload);
 });
 
+//GET user-profile
+router.get("/profile", isAuthenticated, (req, res, next) => {
+  const userId = req.payload._id;
+
+  User.findById(userId)
+    .then ((user) => {
+      if (!user) {
+        res.status(404).json({ message: "Usernot found"});
+        return;
+      }
+
+      const userProfile = {
+        _id: user._id,
+        name: user.name,
+      };
+      res.status(200).json({user: userProfile});
+    })
+    .catch((err) => next(err));
+});
+
 module.exports = router;

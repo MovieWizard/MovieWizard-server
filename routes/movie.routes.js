@@ -1,25 +1,20 @@
 const router = require("express").Router();
 const Movie = require("../models/Movie");
 const mongoose = require("mongoose");
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
-
-//Get Search results 
-router.get('/search', (req, res, next) => {
-  const {q} = req.query
-  Movie.find(
-    { "title": { "$regex": q, "$options": "i" } },
-  )
-  .then(search => res.json(search))
-  .catch((e) => {
-    res.status(500).json({
-      message: "Error get search result",
-      error: e,
+//Get Search results
+router.get("/search", (req, res, next) => {
+  const { q } = req.query;
+  Movie.find({ title: { $regex: q, $options: "i" } })
+    .then((search) => res.json(search))
+    .catch((e) => {
+      res.status(500).json({
+        message: "Error get search result",
+        error: e,
+      });
     });
-  });
-
-})
-
-
+});
 
 // Get all movies
 router.get("/movies", (req, res, next) => {
@@ -47,7 +42,8 @@ router.get("/movies/:movieId", (req, res, next) => {
 });
 
 //CREATE MOVIE:
-router.post("/movies", (req, res, next) => {
+router.post("/movies", isAuthenticated, (req, res, next) => {
+  const userId = req.payload._id;
   const { title, year, poster, actors, genre, plot, imdbRating, language } =
     req.body;
 
@@ -60,13 +56,14 @@ router.post("/movies", (req, res, next) => {
     genre,
     imdbRating,
     language,
+    user: userId,
   };
 
   Movie.create(newMovie)
     .then((response) => res.json(response))
     .catch((e) => {
       console.log("Error creating new Movie", e);
-      res.status(500).jsob({
+      res.status(500).json({
         message: "Error creating a new Movie",
         error: e,
       });
@@ -74,8 +71,9 @@ router.post("/movies", (req, res, next) => {
 });
 
 //UPDATE/EDIT MOVIE:
-router.put("/movies/:movieId", (req, res, next) => {
+router.put("/movies/:movieId", isAuthenticated, (req, res, next) => {
   const { movieId } = req.params;
+  const userId = req.payload._id;
 
   if (!mongoose.Types.ObjectId.isValid(movieId)) {
     res.status(400).json({ message: "Specified id is not valid" });
@@ -93,35 +91,68 @@ router.put("/movies/:movieId", (req, res, next) => {
     language: req.body.language,
   };
 
-  Movie.findByIdAndUpdate(movieId, newDetails, { new: true })
-    .then((updatedMovie) => res.json(updatedMovie))
+  Movie.findById(movieId)
+    .then((movie) => {
+      console.log(movie);
+      if (movie.user.toString() !== userId) {
+        res.status(403).json({ message: "Permission denied" });
+        return;
+      }
+
+      Movie.findByIdAndUpdate(movieId, newDetails, { new: true })
+        .then((updatedMovie) => res.json(updatedMovie))
+        .catch((e) => {
+          console.log("Error updating Movie", e);
+          res.status(500).json({
+            message: "Error updating Movie",
+            error: e,
+          });
+        });
+    })
     .catch((e) => {
-      console.log("Error updating Movie", e);
+      console.log("Error finding Movie", e);
       res.status(500).json({
-        message: "Error updating Movie",
+        message: "Error finding Movie",
         error: e,
       });
     });
 });
 
 //DELETE MOVIE:
-router.delete("/movies/:movieId", (req, res, next) => {
+router.delete("/movies/:movieId", isAuthenticated, (req, res, next) => {
   const { movieId } = req.params;
+  const userId = req.payload._id;
 
   if (!mongoose.Types.ObjectId.isValid(movieId)) {
     res.status(400).json({ message: "Specified id is not valid" });
     return;
   }
 
-  Movie.findByIdAndRemove(movieId)
-    .then(() =>
-      res.json({
-        message: `Movie with ${movieId} was removed successfully.`,
-      })
-    )
+  Movie.findById(movieId)
+    .then((movie) => {
+      console.log(movie);
+      if (movie.user.toString() !== userId) {
+        res.status(403).json({ message: "Permission denied" });
+        return;
+      }
+
+      Movie.findByIdAndRemove(movieId)
+        .then(() =>
+          res.json({
+            message: `Movie with ${movieId} was removed successfully.`,
+          })
+        )
+        .catch((e) => {
+          console.log("Error removing the movie", e);
+          res.status(500).json({
+            error: e,
+          });
+        });
+    })
     .catch((e) => {
-      console.log("Error removing the movie", e);
+      console.log("Error finding Movie", e);
       res.status(500).json({
+        message: "Error finding Movie",
         error: e,
       });
     });

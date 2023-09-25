@@ -2,26 +2,22 @@
 // https://www.npmjs.com/package/dotenv
 require("dotenv").config();
 
+
 // ℹ️ Connects to the database
 require("./db");
 
 // Handles http requests (express is node js framework)
 // https://www.npmjs.com/package/express
 const express = require("express");
+const cors = require('cors');
 
 const app = express();
+app.use(cors()) 
 
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
 
 // 👇 Start handling routes here
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
-
 const indexRoutes = require("./routes/index.routes");
 app.use("/api", indexRoutes);
 
