@@ -16,6 +16,28 @@ router.get("/search", (req, res, next) => {
     });
 });
 
+
+
+//Get filter results
+router.get('/filters', (req, res, next) => {
+  
+  const { rating, genre, year } = req.query
+  Movie.find(
+    { "imdbRating" : {$gte: rating},
+    "year": year,
+    "genre": { "$regex": genre, "$options": "i"}  
+  })
+  .then(filter => res.json(filter))
+  .catch((e) => {
+    res.status(500).json({
+      message: "Error get search result",
+      error: e,
+    });
+  });
+})
+
+
+
 // Get all movies
 router.get("/movies", (req, res, next) => {
   Movie.find()
