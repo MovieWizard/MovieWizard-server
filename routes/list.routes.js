@@ -4,7 +4,7 @@ const Movie = require("../models/Movie")
 const {isAuthenticated} = require("../middleware/jwt.middleware")
 
 //Get all mood list
-router.get('/mood-lists', (req, res, next) => {
+router.get('/mood-lists', isAuthenticated, (req, res, next) => {
     List.find()
     .then(lists => res.json(lists))
     .catch(e => {
@@ -18,7 +18,7 @@ router.get('/mood-lists', (req, res, next) => {
 module.exports = router;
 
 //Create new mood list
-router.post('/mood-lists', (req, res, next) => {
+router.post('/mood-lists', isAuthenticated, (req, res, next) => {
     const {title, description, mood} = req.body
     const user = req.payload._id
     List.create({title, description, mood, user})
@@ -33,7 +33,7 @@ router.post('/mood-lists', (req, res, next) => {
 }) 
 
 // Get mood list
-router.get('/mood-lists/:moodListId', (req, res, next) => {
+router.get('/mood-lists/:moodListId', isAuthenticated, (req, res, next) => {
     const { moodListId } = req.params
     List.findById(moodListId)
     .then(list => res.json(list))
@@ -46,7 +46,7 @@ router.get('/mood-lists/:moodListId', (req, res, next) => {
 })
 
 //Update movie list
-router.put('/mood-lists/:moodListId', (req, res, next) => {
+router.put('/mood-lists/:moodListId', isAuthenticated, (req, res, next) => {
     const { moodListId } = req.params
     const {movieId} = req.body
 
