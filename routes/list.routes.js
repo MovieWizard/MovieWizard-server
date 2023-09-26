@@ -4,7 +4,7 @@ const Movie = require("../models/Movie")
 const {isAuthenticated} = require("../middleware/jwt.middleware")
 
 //Get all mood list
-router.get('/mood-lists', isAuthenticated, (req, res, next) => {
+router.get('/mood-lists', (req, res, next) => {
     List.find()
     .then(lists => res.json(lists))
     .catch(e => {
