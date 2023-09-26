@@ -24,7 +24,7 @@ router.get('/filters', (req, res, next) => {
   const { rating, genre, year } = req.query
   Movie.find(
     { "imdbRating" : {$gte: rating},
-    "year": year,
+    "year": {$gte: year},
     "genre": { "$regex": genre, "$options": "i"}  
   })
   .then(filter => res.json(filter))
