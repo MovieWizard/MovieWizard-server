@@ -26,7 +26,7 @@ router.get('/filters', (req, res, next) => {
     { "imdbRating" : {$gte: rating},
     "year": {$gte: year},
     "genre": { "$regex": genre, "$options": "i"}  
-  })
+  }).limit(4)
   .then(filter => res.json(filter))
   .catch((e) => {
     res.status(500).json({
