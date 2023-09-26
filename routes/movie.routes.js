@@ -16,27 +16,40 @@ router.get("/search", (req, res, next) => {
     });
 });
 
-
-
 //Get filter results
-router.get('/filters', (req, res, next) => {
-  
-  const { rating, genre, year } = req.query
-  Movie.find(
-    { "imdbRating" : {$gte: rating},
-    "year": {$gte: year},
-    "genre": { "$regex": genre, "$options": "i"}  
-  }).limit(4)
-  .then(filter => res.json(filter))
-  .catch((e) => {
-    res.status(500).json({
-      message: "Error get search result",
-      error: e,
-    });
-  });
-})
-
-
+router.get("/filters", (req, res, next) => {
+  const { rating, genre, year, lastMovieId } = req.query;
+  if (lastMovieId) {
+    Movie.find({
+      imdbRating: { $gte: rating },
+      year: { $gte: year },
+      genre: { $regex: genre, $options: "i" },
+      _id: { $gt: lastMovieId },
+    })
+      .limit(4)
+      .then((filter) => res.json(filter))
+      .catch((e) => {
+        res.status(500).json({
+          message: "Error get search result",
+          error: e,
+        });
+      });
+  } else {
+    Movie.find({
+      imdbRating: { $gte: rating },
+      year: { $gte: year },
+      genre: { $regex: genre, $options: "i" },
+    })
+      .limit(4)
+      .then((filter) => res.json(filter))
+      .catch((e) => {
+        res.status(500).json({
+          message: "Error get search result",
+          error: e,
+        });
+      });
+  }
+});
 
 // Get all movies
 router.get("/movies", (req, res, next) => {
