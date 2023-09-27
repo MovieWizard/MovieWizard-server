@@ -35,6 +35,7 @@ router.post("/mood-lists", isAuthenticated, (req, res, next) => {
 router.get("/mood-lists/:moodListId", isAuthenticated, (req, res, next) => {
   const { moodListId } = req.params;
   List.findById(moodListId)
+    .populate("movies")
     .then((list) => res.json(list))
     .catch((e) => {
       res.status(500).json({
