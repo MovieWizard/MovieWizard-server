@@ -5,7 +5,8 @@ const {isAuthenticated} = require("../middleware/jwt.middleware")
 
 //Get all mood list
 router.get('/mood-lists', isAuthenticated, (req, res, next) => {
-    List.find()
+    const userId = req.payload._id
+    List.find({user: userId})
     .then(lists => res.json(lists))
     .catch(e => {
         res.status(500).json({
@@ -15,7 +16,6 @@ router.get('/mood-lists', isAuthenticated, (req, res, next) => {
     })
 }) 
 
-module.exports = router;
 
 //Create new mood list
 router.post('/mood-lists', isAuthenticated, (req, res, next) => {
