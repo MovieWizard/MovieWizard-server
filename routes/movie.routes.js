@@ -6,7 +6,8 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 //Get Search results
 router.get("/search", (req, res, next) => {
   const { q } = req.query;
-  Movie.find({ title: { $regex: q, $options: "i" } }).limit(20)
+  Movie.find({ title: { $regex: q, $options: "i" } })
+    .limit(20)
     .then((search) => res.json(search))
     .catch((e) => {
       res.status(500).json({
@@ -77,8 +78,17 @@ router.get("/movies/:movieId", (req, res, next) => {
 //CREATE MOVIE:
 router.post("/movies", isAuthenticated, (req, res, next) => {
   const userId = req.payload._id;
-  const { title, year, poster, actors, genre, plot, imdbRating, language } =
-    req.body;
+  const {
+    title,
+    year,
+    poster,
+    actors,
+    genre,
+    plot,
+    imdbRating,
+    language,
+    videoid,
+  } = req.body;
 
   const newMovie = {
     title,
@@ -89,6 +99,7 @@ router.post("/movies", isAuthenticated, (req, res, next) => {
     genre,
     imdbRating,
     language,
+    videoid,
     user: userId,
   };
 
