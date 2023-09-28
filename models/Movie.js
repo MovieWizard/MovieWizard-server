@@ -7,11 +7,7 @@ const MovieSchema = new Schema({
     unique: true,
     require: true,
   },
-  year: {
-    type: String,
-    unique: true,
-    require: true,
-  },
+  year: String,
   poster: String,
   actors: String,
   genre: String,
