@@ -106,11 +106,17 @@ router.post("/movies", isAuthenticated, (req, res, next) => {
   Movie.create(newMovie)
     .then((response) => res.json(response))
     .catch((e) => {
-      console.log("Error creating new Movie", e);
-      res.status(500).json({
-        message: "Error creating a new Movie",
-        error: e,
-      });
+      if (e.code === 11000) {
+        res.status(400).json({
+          message: "This movie exist, add another one",
+          error: e,
+        });
+      } else {
+        res.status(500).json({
+          message: "Error creating a new Movie",
+          error: e,
+        });
+      }
     });
 });
 
