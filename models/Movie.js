@@ -2,8 +2,16 @@ const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
 const MovieSchema = new Schema({
-  title: String,
-  year: String,
+  title: {
+    type: String,
+    unique: true,
+    require: true,
+  },
+  year: {
+    type: String,
+    unique: true,
+    require: true,
+  },
   poster: String,
   actors: String,
   genre: String,
