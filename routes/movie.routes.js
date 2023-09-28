@@ -16,27 +16,22 @@ router.get("/search", (req, res, next) => {
     });
 });
 
-
-
 //Get filter results
-router.get('/filters', (req, res, next) => {
-  
-  const { rating, genre, year } = req.query
-  Movie.find(
-    { "imdbRating" : {$gte: rating},
-    "year": year,
-    "genre": { "$regex": genre, "$options": "i"}  
+router.get("/filters", (req, res, next) => {
+  const { rating, genre, year } = req.query;
+  Movie.find({
+    imdbRating: { $gte: rating },
+    year: year,
+    genre: { $regex: genre, $options: "i" },
   })
-  .then(filter => res.json(filter))
-  .catch((e) => {
-    res.status(500).json({
-      message: "Error get search result",
-      error: e,
+    .then((filter) => res.json(filter))
+    .catch((e) => {
+      res.status(500).json({
+        message: "Error get search result",
+        error: e,
+      });
     });
-  });
-})
-
-
+});
 
 // Get all movies
 router.get("/movies", (req, res, next) => {
@@ -45,6 +40,22 @@ router.get("/movies", (req, res, next) => {
     .catch((e) => {
       res.status(500).json({
         message: "Error get the movies list",
+        error: e,
+      });
+    });
+});
+
+// GET MOVIES BY CURRENT USER:
+router.get("/my-movies", isAuthenticated, (req, res, next) => {
+  const userId = req.payload._id;
+
+  Movie.find({
+    user: userId,
+  })
+    .then((movies) => res.json(movies))
+    .catch((e) => {
+      res.status(500).json({
+        message: "Error get my movies",
         error: e,
       });
     });
