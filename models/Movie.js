@@ -10,10 +10,11 @@ const MovieSchema = new Schema({
   plot: String,
   imdbRating: String,
   language: String,
+  videoid: String,
 
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
   },
 });
 
