@@ -7,7 +7,6 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 router.get("/search", (req, res, next) => {
   const { q } = req.query;
   Movie.find({ title: { $regex: q, $options: "i" } })
-    .limit(20)
     .then((search) => res.json(search))
     .catch((e) => {
       res.status(500).json({
