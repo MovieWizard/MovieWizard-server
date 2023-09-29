@@ -6,7 +6,7 @@ The MovieWizard Server is the backend component of the MovieWizard project. It s
 
 **IMPORTANT:** This repository contains the backend code (Express API).
 
-A repository with the frontend code (React) can be found here: [MovieWizard Frontend](#https://github.com/MovieWizard/MovieWizard-client)
+A repository with the frontend code (React) can be found here: [MovieWizard Frontend](https://github.com/MovieWizard/MovieWizard-client)
 
 ## Getting Started
 
@@ -67,4 +67,4 @@ To run this application on your computer, follow these steps:
 ## Demo
 
 You can test the deployed version of the MovieWizard API using the following link:
-[MovieWizard API](#https://movie-wizard.adaptable.app/)
+[MovieWizard API](https://movie-wizard.adaptable.app/)
