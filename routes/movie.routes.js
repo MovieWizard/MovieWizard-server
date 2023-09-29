@@ -157,6 +157,7 @@ router.put("/movies/:movieId", isAuthenticated, (req, res, next) => {
     genre: req.body.genre,
     imdbRating: req.body.imdbRating,
     language: req.body.language,
+    videoid: req.body.videoid,
   };
 
   Movie.findById(movieId)
